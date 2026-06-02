@@ -33,10 +33,36 @@ The exploit was developed and tested using the following:
   ([github.com/JonathanSalwan/ROPgadget](https://github.com/JonathanSalwan/ROPgadget))
 - **checksec** — used to inspect binary security mitigations
 
+## The C program
+
+## Vulnerable Program
+
+The target of our exploit is a small C program which was pupusefully designed to cause stack-based buffer overflow. The vulnerability lies in the use of `gets()`, a depreciated unsafe function which unlike its "safer" alternatives (`fgets`, `read`), that can still be overflowed, `gets()` accepts input until a newline or EOF is encountered not limiting the number of characters read, which can lead to buffer overflows.
+
+If we give this function more bytes than the buffer can store, the extra bytes spill into the stack and overwrite the saved return address — the value the CPU uses to know where to jump when the function ends. If we control that address, we control where the program goes.
+
+### Source Code
+
+```c
+#include <stdio.h>
+
+extern char *gets(char *s);
+
+void read_message() {
+    char buffer[80];
+    printf("Enter message: ");
+    gets(buffer);
+    printf("Message received: %s\n", buffer);
+}
+
+int main() {
+    read_message();
+    return 0;
+}
+```
+
+> The explicit `extern` declaration of `gets()` is required because modern glibc headers no longer expose the prototype, and compiling without it would result in an `implicit-function-declaration` error.
+
+## Exploit
 
 
-
-
-> Note: Example page content from [GetGrav.org](https://learn.getgrav.org/17/content/markdown), included to demonstrate the portability of Markdown-based content
-
-[^1]: [Markdown - John Gruber](https://daringfireball.net/projects/markdown/)
