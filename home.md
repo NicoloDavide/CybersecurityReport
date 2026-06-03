@@ -170,3 +170,19 @@ We need to calculate the ROPgadgets since pop rdi; ret puts the /bin/sh address 
 <img src="Foto/foto6.png" alt="description" width="800">
 
 We'll then need to find the absolute adress for the gadgets buy using gdb once again and using ```p/x libc base address + gadget 1&2 address```
+
+### 9) Completing the Exploit
+
+Now that we have found all the addresses, since we have ASLR disabled, they wont change and we can substitute them in our python exploit.
+
+### 10) Running the exploit
+
+To run the exploit we'll need to run the following command: ```python3 exploit.py```. If everything is done right we should spawn an interactive shell with the vulnerable process privileges.
+
+## Conclusion
+
+
+
+
+
+
