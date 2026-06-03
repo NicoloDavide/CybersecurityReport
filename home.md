@@ -155,10 +155,18 @@ We need to calculate the "offset" which means how many bytes of input we need to
 
 <img src="Foto/foto3.png" alt="description" width="800">
 
-7) Addresses of system, /bin/sh and base address of libc
+### 7) Addresses of system, /bin/sh and base address of libc
 
 While in gdb we can execute ```p system```, ```search -t string "/bin/sh"``` to find the addresses of system function and the string /bin/sh which we'll need since system is code we want to jump to. While /bin/sh is the data you pass to it as the argument. The base address of libc ( that we'll use to calculate full address for the gadgets) can be found by using the command ```vmmap libc```.
 
-<img src="Foto/foto3.png" alt="description" width="800">
+<img src="Foto/foto4.png" alt="description" width="800">
 
+### 8) Finding the ROPgadgets
 
+We need to calculate the ROPgadgets since pop rdi; ret puts the /bin/sh address into position so system knows what to run, and the gadget with only ret  aligns the stack so that system doesn't crash. We'll use the following commands: 
+- ```ROPgadget --binary /lib/x86_64-linux-gnu/libc.so.6 | grep "pop rdi ; ret"```
+- ```ROPgadget --binary /lib/x86_64-linux-gnu/libc.so.6 --only "ret"```
+<img src="Foto/foto5.png" alt="description" width="800">
+<img src="Foto/foto6.png" alt="description" width="800">
+
+We'll then need to find the absolute adress for the gadgets buy using gdb once again and using ```p/x libc base address + gadget 1&2 address```
