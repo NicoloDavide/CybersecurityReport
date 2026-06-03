@@ -179,7 +179,25 @@ Now that we have found all the addresses, since we have ASLR disabled, they wont
 
 To run the exploit we'll need to run the following command: ```python3 exploit.py```. If everything is done right we should spawn an interactive shell with the vulnerable process privileges.
 
+<img src="Foto/foto7.png" alt="description" width="800">
+
 ## Conclusion
+
+In this demo we exploited a buffer overflow in a simple C program through the ret2libc technique to obtain an interactive shell, without the need to inject any executable code. The attack worked only because we disabled the mitigations that are applied by default: ASLR at the kernel level, the stack canary via -fno-stack-protector, and PIE via -no-pie.
+
+Once these protections are restored, the same exploit fails. The canary detects the stack corruption before the ret instruction is reached, and even if it were bypassed, ASLR would invalidate every hardcoded address in the script.Although no mitigation is unbeatable, their combination makes this kind of attack impractical against a modern hardened system. A professionally constructed exploit would need to be able to bypass different mitigations at the same time, hence it's difficlty.
+
+## Sources
+
+- Youtube reference : https://www.youtube.com/watch?v=0CFWHjc4B-I&t=274s
+- Youtube reference : https://www.youtube.com/watch?v=Dq8l1_-QgAc&t=20s
+- Claude.ai
+- ROPgadgets : https://www.ired.team/offensive-security/code-injection-process-injection/binary-exploitation/rop-chaining-return-oriented-programming
+- Pwntools doc : https://docs.pwntools.com/en/stable/intro.html
+- ret2libc — Binary Exploitation (CTF 101) https://ctf101.org/binary-exploitation/return-oriented-programming/
+- Chatgpt
+- pwnDBG documentation: https://pwndbg.re/stable/commands/misc/cyclic/
+
 
 
 
