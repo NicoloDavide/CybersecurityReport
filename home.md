@@ -145,8 +145,12 @@ The program is constructed by a main function and a read_message, the disassembl
 
 ```disassemble main``` ```disassemble read_message```
 
+<img src="Foto/foto2.png" alt="description" width="800">
+
 The main function simply calls read_message. Inside read_message, we can see the call to ```gets()```, which is the source of the vulnerability.
 
+### 6) Offset
 
+We need to calculate the "offset" which means how many bytes of input we need to write before the data starts overwriting the saved RIP (register instruction pointer). We will do so by using the cyclic command installed with pwndbg. The cyclic command generates a non-repeating pattern in which every small segment is unique. When this pattern is supplied as input, it overflows the buffer and causes the program to crash, leaving a few of those unique characters in a register such as $rsp. Because each segment appears only once, you can take the characters found there and run cyclic -l <bytes>, which identifies the exact position they originated from. That position tells you how many bytes are required before reaching the saved return address.
 
-
+<img src="Foto/foto2.png" alt="description" width="800">
