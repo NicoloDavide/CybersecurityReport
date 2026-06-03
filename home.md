@@ -132,6 +132,21 @@ gcc -fno-stack-protector -z execstack -no-pie -g vuln.c -o vuln
 
 ### 4) Check if mitigations are disabled
 
+<img src="Foto/foto1.png" alt="description" width="800">
+
+### 5) Launch GDB
+
+We are going to launch the gdb debugger to analyze the vulnerable C program
+
+```bash
+gdb ./vuln
+```
+The program is constructed by a main function and a read_message, the disassemble command in gdb translates the machine code of a compiled function back into human-readable assembly instructions, allowing us to inspect what the program actually does at the CPU level. 
+
+```disassemble main``` ```disassemble read_message```
+
+The main function simply calls read_message. Inside read_message, we can see the call to ```gets()```, which is the source of the vulnerability.
+
 
 
 
