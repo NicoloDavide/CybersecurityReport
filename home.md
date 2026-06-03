@@ -153,4 +153,12 @@ The main function simply calls read_message. Inside read_message, we can see the
 
 We need to calculate the "offset" which means how many bytes of input we need to write before the data starts overwriting the saved RIP (register instruction pointer). We will do so by using the cyclic command installed with pwndbg. The cyclic command generates a non-repeating pattern in which every small segment is unique. When this pattern is supplied as input, it overflows the buffer and causes the program to crash, leaving a few of those unique characters in a register such as $rsp. Because each segment appears only once, you can take the characters found there and run cyclic -l <bytes>, which identifies the exact position they originated from. That position tells you how many bytes are required before reaching the saved return address.
 
-<img src="Foto/foto2.png" alt="description" width="800">
+<img src="Foto/foto3.png" alt="description" width="800">
+
+7) Addresses of system, /bin/sh and base address of libc
+
+While in gdb we can execute ```p system```, ```search -t string "/bin/sh"``` to find the addresses of system function and the string /bin/sh which we'll need since system is code we want to jump to. While /bin/sh is the data you pass to it as the argument. The base address of libc ( that we'll use to calculate full address for the gadgets) can be found by using the command ```vmmap libc```.
+
+<img src="Foto/foto3.png" alt="description" width="800">
+
+
