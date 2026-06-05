@@ -197,6 +197,7 @@ Once these protections are restored, the same exploit fails. The canary detects 
 - ret2libc — Binary Exploitation (CTF 101) https://ctf101.org/binary-exploitation/return-oriented-programming/
 - Chatgpt
 - pwnDBG documentation: https://pwndbg.re/stable/commands/misc/cyclic/
+- Youtube reference : https://www.youtube.com/watch?v=87LOnpCOMJk
 
 
 
