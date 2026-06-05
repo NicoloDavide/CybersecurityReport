@@ -23,22 +23,6 @@ The exploit was developed and tested using the following:
   - `-z execstack` — marks the stack as executable
   - `-no-pie` — disables Position Independent Executable
 
-## Utilized Tools
-
-- **GDB + pwndbg** — used for debugging and memory analysis
-  ([github.com/pwndbg/pwndbg](https://github.com/pwndbg/pwndbg))
-- **pwntools** — A python library for exploit development
-  ([docs.pwntools.com](https://docs.pwntools.com/))
-- **ROPgadget** — used to search for ROP gadgets in binaries
-  ([github.com/JonathanSalwan/ROPgadget](https://github.com/JonathanSalwan/ROPgadget))
-- **checksec** — used to inspect binary security mitigations
-
-## Memory unsafe C program
-
-The target of our exploit is a small C program which was pupusefully designed to cause stack-based buffer overflow. The vulnerability lies in the use of `gets()`, a depreciated unsafe function which unlike its "safer" alternatives (`fgets`, `read`), that can still be overflowed, `gets()` accepts input until a newline or EOF is encountered not limiting the number of characters read, which can lead to buffer overflows.
-
-If we give this function more bytes than the buffer can store, the extra bytes spill into the stack and overwrite the saved return address — the value the CPU uses to know where to jump when the function ends. If we control that address, we control where the program goes.
-
 ## Exploit
 
 We remind that we are going to disable all mitigations for the purpouse of this exploit. We are going to see how if ASLR is enabled this wouldn't work due to the randomization of the address space. If that was the case we would either need a shellcode that obtains the address of a variable whose relative address to shellcode is know, or try and brute-force segment locations.
@@ -186,6 +170,16 @@ To run the exploit we'll need to run the following command: ```python3 exploit.p
 In this demo we exploited a buffer overflow in a simple C program through the ret2libc technique to obtain an interactive shell, without the need to inject any executable code. The attack worked only because we disabled the mitigations that are applied by default: ASLR at the kernel level, the stack canary via -fno-stack-protector, and PIE via -no-pie.
 
 Once these protections are restored, the same exploit fails. The canary detects the stack corruption before the ret instruction is reached, and even if it were bypassed, ASLR would invalidate every hardcoded address in the script.Although no mitigation is unbeatable, their combination makes this kind of attack impractical against a modern hardened system. A professionally constructed exploit would need to be able to bypass different mitigations at the same time, hence it's difficlty.
+
+## Utilized Tools
+
+- **GDB + pwndbg** — used for debugging and memory analysis
+  ([github.com/pwndbg/pwndbg](https://github.com/pwndbg/pwndbg))
+- **pwntools** — A python library for exploit development
+  ([docs.pwntools.com](https://docs.pwntools.com/))
+- **ROPgadget** — used to search for ROP gadgets in binaries
+  ([github.com/JonathanSalwan/ROPgadget](https://github.com/JonathanSalwan/ROPgadget))
+- **checksec** — used to inspect binary security mitigations
 
 ## Sources
 
